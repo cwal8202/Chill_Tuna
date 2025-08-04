@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+  <link href="{% static 'css/persona.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}페르소나 생성하기{% endblock %}
+
+{% block content %}
+<div class="persona-create-wrapper">
+  <h2 class="persona-title">페르소나 생성하기</h2>
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="form-section">
+      <label>연령</label>
+      <div class="btn-group" data-name="age">
+        {% for age in age_options %}
+          <button type="button" class="option-btn">{{ age }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label>성별</label>
+      <div class="btn-group" data-name="gender">
+        {% for gender in gender_options %}
+          <button type="button" class="option-btn">{{ gender }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label>가족 구성</label>
+      <div class="btn-group" data-name="family">
+        {% for item in family_options %}
+          <button type="button" class="option-btn">{{ item }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label>고객 취향 <span class="hint">(최대 3개)</span></label>
+      <div class="btn-group multi-select" data-name="taste" data-max="3">
+        {% for item in taste_options %}
+          <button type="button" class="option-btn">{{ item }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label>고객 가치(RFM)</label>
+      <div class="btn-group" data-name="rfm">
+        {% for item in rfm_options %}
+          <button type="button" class="option-btn">{{ item }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label>라이프스타일</label>
+      <div class="btn-group multi-select" data-name="lifestyle">
+        {% for item in lifestyle_options %}
+          <button type="button" class="option-btn">{{ item }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">설정</button>
+  </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".btn-group").forEach(group => {
+    const isMulti = group.classList.contains("multi-select");
+    const max = parseInt(group.dataset.max || 99);
+
+    group.querySelectorAll(".option-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (isMulti) {
+          btn.classList.toggle("active");
+          const selected = group.querySelectorAll(".option-btn.active");
+          if (selected.length > max) {
+            btn.classList.remove("active");
+          }
+        } else {
+          group.querySelectorAll(".option-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        }
+      });
+    });
+  });
+});
+</script>
+{% endblock %}
