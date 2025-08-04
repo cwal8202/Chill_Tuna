@@ -121,8 +121,8 @@ for i, task in enumerate(all_navigation_tasks):
         except TimeoutException:
             print("  └─ ⚠️ 정렬 버튼을 찾을 수 없음. 그대로 진행합니다.")
 
-        # 페이지 순회하며 상품 정보 수집 (최대 5페이지)
-        max_pages = 5
+        # 페이지 순회하며 상품 정보 수집 (최대 10페이지)
+        max_pages = 10
         for page_num in range(1, max_pages + 1):
             print(f"  └─ 페이지 {page_num}/{max_pages}")
             try:
