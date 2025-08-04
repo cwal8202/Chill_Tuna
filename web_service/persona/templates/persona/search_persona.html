@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+  <link href="{% static 'css/search.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}채팅 검색{% endblock %}
+
+{% block content %}
+<div class="search-wrapper">
+  <div class="search-box">
+    <input type="text" placeholder="🔍 채팅 검색" class="search-input" id="searchInput" />
+
+    <ul class="chat-history-list" id="chatList">
+      {% for chat in chat_list %}
+        <li class="chat-history-item">{{ chat.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("searchInput");
+    const list = document.getElementById("chatList");
+    const items = list.getElementsByTagName("li");
+
+    input.addEventListener("input", function () {
+      const filter = input.value.toLowerCase();
+      Array.from(items).forEach((item) => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(filter) ? "block" : "none";
+      });
+    });
+  });
+</script>
+{% endblock %}

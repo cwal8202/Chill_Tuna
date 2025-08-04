@@ -23,5 +23,5 @@ urlpatterns = [
     path('create/', views.create_persona, name='create_persona'),
     # path('edit/<int:id>/', views.edit_persona, name='edit_persona'),
     path('chat/', views.chat_persona, name='chat_persona'),
-    # path('search/', views.search_persona, name='search_persona'),
+    path('search/', views.search_persona, name='search_persona'),
 ]

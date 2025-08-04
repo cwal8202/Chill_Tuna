@@ -17,3 +17,12 @@ def create_persona(request) :
 
 def chat_persona(request) :
     return render(request, "persona/chat_persona.html")
+
+def search_persona(request) :
+    chat_list = [
+        {"name": "페르소나 1 - 박동현"},
+        {"name": "페르소나 2 - 박진성"},
+        {"name": "페르소나 3 - 주용곤"},
+        {"name": "페르소나 5 - 최장호"}
+    ]
+    return render(request, "persona/search_persona.html", {"chat_list": chat_list})

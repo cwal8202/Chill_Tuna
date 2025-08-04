@@ -1,11 +1,10 @@
 .persona-create-wrapper {
   width: 100%;
   max-width: 720px;
-  margin: 60px auto;
-  padding: 48px;
-  background-color: #f3f4f6;
+  margin: 40px auto 60px;
+  padding: 40px;
+  background-color: #f9fafb;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
 .persona-title {
