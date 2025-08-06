@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
+app_name = "persona"
 urlpatterns = [
     # path('', views.home, name='home'),  # /persona/
     path('create/', views.create_persona, name='create_persona'),
