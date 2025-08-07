@@ -23,7 +23,7 @@ def chat_message_api(request):
         thread = get_object_or_404(ChatThread, id=thread_id)
         persona = thread.persona
         
-        # 사용자 메시지 DB에 저장
+        # 사용자 메시지 DB에 저장하기
         ChatMessage.objects.create(
             thread=thread,
             sender='user',
