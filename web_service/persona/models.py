@@ -16,9 +16,6 @@ class Persona(models.Model):
     persona_summary_tag = models.TextField(max_length=500, help_text="예: 30대 여성, 웰빙형")
 
     def __str__(self):
-        # 객체를 문자열로 표현할 때 사용합니다.
-        # 예: '30대 여성 웰빙형'
-        # return f"{self.age_group} {self.gender} {self.lifestyle} 페르소나"
         return f"{self.segment} - 페르소나 {self.id} {self.name}"
 
     class Meta:
