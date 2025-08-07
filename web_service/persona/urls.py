@@ -1,7 +1,10 @@
 from django.urls import path
 from . import views
 
-app_name = "persona"
+app_name = 'persona'
+
 urlpatterns = [
-    path('', views.create_persona, name='create'),  # /persona/
+    path('create/', views.create_persona, name='create_persona'),
+    path('chat/<int:persona_id>/', views.chat_persona_view, name='chat_persona'),
+    path('find_and_chat/', views.find_and_chat_view, name='find_and_chat'),
 ]
