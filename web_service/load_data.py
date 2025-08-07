@@ -12,7 +12,7 @@ from persona.models import Persona # '앱이름'을 실제 앱 이름으로 변�
 
 def load_persona_data():
     # JSON 파일의 경로
-    json_file_path = '/persona/static/personas_batch1.json' # 페르소나 저장 파일명
+    json_file_path = 'persona/static/json/personas_batch1.json' # 페르소나 저장 파일명
 
     # 매핑 사전 (2단계에서 만든 것)
     field_mapping = {
