@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Persona(models.Model):
-    id = models.IntegerField(auto_created=True, primary_key=True)
+    # id = models.IntegerField(auto_created=True, primary_key=True)
     name = models.CharField(max_length=20)
     segment = models.CharField(max_length=50)
     age_group = models.CharField(max_length=10, help_text="예: 30대")

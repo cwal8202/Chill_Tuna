@@ -4,7 +4,7 @@ from persona.models import Persona  # 페르소나 완성 되면 그때 사용
 # Create your models here.
 
 class ChatThread(models.Model):
-    id = models.IntegerField(auto_created=True, primary_key=True)
+    # id = models.IntegerField(auto_created=True, primary_key=True)
 
     # 채팅 스레드의 고유 ID - 스레드가 어떤 페르소나와 대화한 것인지 연결
     persona_id = models.ForeignKey(Persona, on_delete=models.CASCADE)
