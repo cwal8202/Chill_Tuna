@@ -78,8 +78,17 @@ graph TD
 
 - id: PK
 - age_group, gender, region, lifestyle, rfm_segment(임시)
-- description: TextField (페르소나 요약 설명)
-- created_at
+- name
+- segment (마이크로세그먼트)
+- age_group : 연령대
+- family_structure : 가족구성
+- gender
+- customer_value : RFM세그먼트
+- purchase_pattern : 소비패턴 - 취향(주요 구매 품목/카테고리)
+- lifestyle : 소비패턴 - 성향
+- job 
+- persona_summary_tag: TextField (페르소나 요약 설명)
+- (삭제) created_at
 
 ### ChatThread
 
@@ -105,7 +114,7 @@ graph TD
 - segment_share: Dict (예: { "웰빙VIP": 0.42, "가성비": 0.18 })
 - seasonal_trend: TextField
 - promotion_effect: FloatField (0.0 ~ 1.0)
-- summary: TextField (RAG용 문장화
+- summary: TextField (RAG용 문장화)
 
 ---
 

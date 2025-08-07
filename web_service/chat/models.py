@@ -1,8 +1,6 @@
 from django.db import models
 from persona.models import Persona  # 페르소나 완성 되면 그때 사용
 
-# Create your models here.
-
 class ChatThread(models.Model):
     # id = models.IntegerField(auto_created=True, primary_key=True)
 

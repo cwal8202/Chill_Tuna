@@ -1,3 +1,6 @@
+# load_data.py
+# 페르소나를 저장한 json파일을 모델에 맞춰 집어넣는 파일로 임시사용용
+
 import os
 import django
 import json
