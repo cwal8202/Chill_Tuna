@@ -3,69 +3,60 @@
 
 {% block extra_head %}
   <link href="{% static 'css/persona/persona.css' %}" rel="stylesheet">
+  <style>
+    /* 활성화된 버튼 스타일 */
+    .option-btn.active {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  </style>
 {% endblock %}
 
-{% block title %}페르소나 생성하기{% endblock %}
+{% block title %}페르소나 조건 선택{% endblock %}
 
 {% block content %}
 <div class="persona-create-wrapper">
-  <h2 class="persona-title">페르소나 생성하기</h2>
-  <form method="POST">
-    {% csrf_token %}
+  <h2 class="persona-title">페르소나 조건 선택</h2>
+  
+  <form method="GET" action="{% url 'persona:find_and_chat' %}" id="persona-form">
 
     <div class="form-section">
-      <label>연령</label>
-      <div class="btn-group" data-name="age">
-        {% for age in age_options %}
-          <button type="button" class="option-btn">{{ age }}</button>
-        {% endfor %}
+      <label>연령대</label>
+      <div class="btn-group" data-input-name="age_group">
+        {% for age in age_options %}<button type="button" class="option-btn">{{ age }}</button>{% endfor %}
       </div>
     </div>
 
     <div class="form-section">
       <label>성별</label>
-      <div class="btn-group" data-name="gender">
-        {% for gender in gender_options %}
-          <button type="button" class="option-btn">{{ gender }}</button>
-        {% endfor %}
+      <div class="btn-group" data-input-name="gender">
+        {% for gender in gender_options %}<button type="button" class="option-btn">{{ gender }}</button>{% endfor %}
       </div>
     </div>
 
     <div class="form-section">
       <label>가족 구성</label>
-      <div class="btn-group" data-name="family">
-        {% for item in family_options %}
-          <button type="button" class="option-btn">{{ item }}</button>
-        {% endfor %}
+      <div class="btn-group" data-input-name="family_structure">
+        {% for item in family_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
       </div>
     </div>
-
-    <div class="form-section">
-      <label>고객 취향 <span class="hint">(최대 3개)</span></label>
-      <div class="btn-group multi-select" data-name="taste" data-max="3">
-        {% for item in taste_options %}
-          <button type="button" class="option-btn">{{ item }}</button>
-        {% endfor %}
-      </div>
-    </div>
-
+    
     <div class="form-section">
       <label>고객 가치(RFM)</label>
-      <div class="btn-group" data-name="rfm">
-        {% for item in rfm_options %}
-          <button type="button" class="option-btn">{{ item }}</button>
-        {% endfor %}
+      <div class="btn-group" data-input-name="customer_value">
+        {% for item in rfm_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
       </div>
     </div>
 
     <div class="form-section">
-      <label>라이프스타일</label>
-      <div class="btn-group multi-select" data-name="lifestyle">
-        {% for item in lifestyle_options %}
-          <button type="button" class="option-btn">{{ item }}</button>
-        {% endfor %}
+      <label>라이프스타일 <span class="hint">(다중 선택 가능)</span></label>
+      <div class="btn-group multi-select" data-input-name="lifestyle">
+        {% for item in lifestyle_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
       </div>
     </div>
+
+    <div id="hidden-inputs"></div>
 
     <button type="submit" class="submit-btn">설정</button>
   </form>
@@ -73,25 +64,40 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById('persona-form');
+  const hiddenInputsContainer = document.getElementById('hidden-inputs');
+
   document.querySelectorAll(".btn-group").forEach(group => {
     const isMulti = group.classList.contains("multi-select");
-    const max = parseInt(group.dataset.max || 99);
-
+    
     group.querySelectorAll(".option-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         if (isMulti) {
           btn.classList.toggle("active");
-          const selected = group.querySelectorAll(".option-btn.active");
-          if (selected.length > max) {
-            btn.classList.remove("active");
-          }
         } else {
           group.querySelectorAll(".option-btn").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
         }
+        updateHiddenInputs(); // 버튼 클릭 시 숨겨진 input 업데이트
       });
     });
   });
+
+  function updateHiddenInputs() {
+    hiddenInputsContainer.innerHTML = '';
+
+    document.querySelectorAll('.option-btn.active').forEach(activeBtn => {
+      const group = activeBtn.closest('.btn-group');
+      const inputName = group.dataset.inputName;
+      const inputValue = activeBtn.textContent;
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = inputName;
+      input.value = inputValue;
+      hiddenInputsContainer.appendChild(input);
+    });
+  }
 });
 </script>
 {% endblock %}
