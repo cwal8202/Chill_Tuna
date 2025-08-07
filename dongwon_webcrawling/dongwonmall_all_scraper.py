@@ -138,13 +138,21 @@ for i, task in enumerate(all_navigation_tasks):
 
             for item in items:
                 try:
+                    product_id = item.get_attribute("data-product-id")
                     name = item.find_element(By.CSS_SELECTOR, "p.name").text.strip()
                     price = item.find_element(By.CSS_SELECTOR, "div.price_info span.new_price strong").text.strip()
                     grade = item.find_element(By.CSS_SELECTOR, "span.star_rating span.grade").text.strip()
                     review = item.find_element(By.CSS_SELECTOR, "span.star_rating span.review").text.strip()
+
+                    # 상품 상세 정보 url
+                    product_url = f"https://www.dongwonmall.com/product/detail.do?productId={product_id}&cate_id="
+
+
                     all_data.append({
                         "1차 카테고리": task['l1_name'], "2차 카테고리": task['l2_name'], "3차 카테고리": task['l3_name'],
-                        "페이지": page_num, "상품명": name, "가격": price, "평점": grade, "리뷰 수": review
+                        "페이지": page_num, "상품명": name, "가격": price, "평점": grade, "리뷰 수": review, 
+                        "상품ID": product_id,
+                        "상품URL": product_url
                     })
                 except NoSuchElementException:
                     continue # 일부 정보 없는 상품은 건너뛰기
