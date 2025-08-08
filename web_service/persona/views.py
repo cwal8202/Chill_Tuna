@@ -1,56 +1,107 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .models import Persona
 import json
+import random
 
 
 # 함수명      : create_persona
 # input      : request
 # output     : HttpResponse (render 또는 redirect)
-# 작성자      : 박동현
-# 작성일자    : 2025-08-07
+# 작성자      : 주용곤
+# 작성일자    : 2025-08-08
 # 함수설명    : 
 #               1. GET 요청 시, 페르소나 조건 선택 페이지를 렌더링
 #               2. 해당 페이지의 버튼/폼에 필요한 선택 옵션 목록을 context를 통해 전달
-#               3. POST 요청을 하면 새 페르소나를 생성하고 DB에 저장
 
 def create_persona(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        segment = request.POST.get('segment')
-        age_group = request.POST.get('age_group')
-        family_structure = request.POST.get('family_structure')
-        gender = request.POST.get('gender')
-        customer_value = request.POST.get('customer_value')
-        job = request.POST.get('job')
-        persona_summary_tag = request.POST.get('persona_summary_tag')
-        purchase_pattern_str = request.POST.get('purchase_pattern', '{}')
-        lifestyle_str = request.POST.get('lifestyle', '{}')
-
-        Persona.objects.create(
-            name=name,
-            segment=segment,
-            age_group=age_group,
-            family_structure=family_structure,
-            gender=gender,
-            customer_value=customer_value,
-            job=job,
-            persona_summary_tag=persona_summary_tag,
-            purchase_pattern=json.loads(purchase_pattern_str),
-            lifestyle=json.loads(lifestyle_str)
-        )
-        
-        return redirect('persona:search_persona')
+    context = {
+        "age_options": ["20대", "30대", "40대", "50대", "60대 이상", "랜덤"],
+        "gender_options": ["남", "여", "랜덤"],
+        "job_options": ["회사원", "학생", "자영업자", "프리랜서", "은퇴자", "랜덤"],
+        "family_options": ["1인 가구", "부모동거", "부부", "자녀1명", "자녀2명 이상", "기타", "랜덤"],
+        "purchase_pattern_options": [
+            "통조림/즉석/면류", "생수/음료/커피", "과자/떡/베이커리",
+            "냉장/냉동/간편식", "유제품", "건강식품", "랜덤"
+        ],
+        "customer_value_options": [
+            "VIP", "우수고객", "잠재우수고객", "신규고객",
+            "잠재이탈고객", "이탈/휴면고객", "랜덤"
+        ],
+        "lifestyle_options": ["트렌드추종", "가격민감", "브랜드선호", "건강중시", "랜덤"],
+    }
+    return render(request, "persona/create_persona.html", context)
     
-    else:
-        context = {
-            "age_options": ["20대", "30대", "40대", "50대", "60대 이상"],
-            "gender_options": ["남", "여"],
-            "family_options": ["1인 가구", "부모동거", "부부", "자녀1명", "자녀2명 이상", "기타"],
-            "purchase_pattern_options": ["통조림/즉석/면류", "생수/음료/커피", "과자/떡/베이커리", "냉장/냉동/간편식", "유제품", "건강식품"],
-            "customer_value_options": ["VIP", "우수고객", "잠재우수고객", "신규고객", "잠재이탈고객", "이탈/휴면고객"],
-            "lifestyle_options": ["트렌드추종", "가격민감", "브랜드선호", "건강중시"],
-        }
-        return render(request, "persona/create_persona.html", context)
+
+# 함수명      : build_persona
+# input       : request
+# output      : JsonResponse
+# 작성자      : 주용곤
+# 작성일자    : 2025-08-08
+# 함수설명    : 
+#               1. 
+
+def build_persona(request):
+    options_map = {
+        "age_group": ["20대", "30대", "40대", "50대", "60대 이상", "랜덤"],
+        "gender": ["남", "여", "랜덤"],
+        "family_structure": ["1인 가구", "부모동거", "부부", "자녀1명", "자녀2명 이상", "기타", "랜덤"],
+        "customer_value": ["vip", "우수고객", "잠재우수고객", "신규고객", "잠재이탈고객", "이탈/휴면고객", "랜덤"],
+        "job": ["회사원", "학생", "자영업자", "프리랜서", "은퇴자", "랜덤"],
+        "purchase_pattern": ["통조림/즉석/면류", "생수/음료/커피", "과자/떡/베이커리", "냉장/냉동/간편식", "유제품", "건강식품", "랜덤"],
+        "lifestyle": ["트렌드추종", "가격민감", "브랜드선호", "건강중시", "랜덤"],
+    }
+    
+    # 랜덤 선택 헬퍼
+    def pick_random_single(options):
+        pure = [option for option in options if option != "랜덤"]
+        return random.choice(pure) if pure else None
+
+    def pick_random_multi(options, max_count=None):
+        pure = [option for option in options if option != "랜덤"]
+        if max_count is None:
+            cnt = random.randint(1, len(pure))
+        else:
+            cnt = random.randint(1, min(max_count, len(pure)))
+        return random.sample(pure, cnt)
+
+    # 단일 처리
+    def resolve_single(param_name):
+        value = request.GET.get(param_name)
+        options = options_map[param_name]
+        if not value or value.lower() == "랜덤":
+            return pick_random_single(options)
+        return value
+
+    # 다중 처리
+    def resolve_multi(param_name, max_count=None):
+        values = request.GET.getlist(param_name)
+        options = options_map[param_name]
+        if (not values) or ("랜덤" in [v.lower() for v in values]):
+            return pick_random_multi(options, max_count)
+        whitelisted = []
+        seen = set()
+        allow = set([option for option in options if option != "랜덤"])
+        for value in values:
+            if value in allow and value not in seen:
+                whitelisted.append(value)
+                seen.add(value)
+        if max_count and len(whitelisted) > max_count:
+            whitelisted = whitelisted[:max_count]
+        return whitelisted
+
+    # 모든 항목 처리
+    persona_data = {
+        "나이": resolve_single("age_group"),
+        "성별": resolve_single("gender"),
+        "가족구성": resolve_single("family_structure"),
+        "고객가치(rfm)": resolve_single("customer_value"),
+        "직업": resolve_single("job"),
+        "고객취향": resolve_multi("purchase_pattern", max_count=3),
+        "라이프스타일": resolve_multi("lifestyle"),
+    }
+
+    return JsonResponse(persona_data, json_dumps_params={"ensure_ascii": False})
 
 # 함수명      : chat_persona_view
 # input       : request, persona_id

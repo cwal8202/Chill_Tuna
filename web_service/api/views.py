@@ -37,7 +37,7 @@ def chat_message_api(request):
         # OpenAI API 호출
         client = OpenAI(api_key=config('OPENAI_API_KEY'))
         
-        system_prompt = f"당신은 {persona.name}입니다. 페르소나입니다. 다음 페르소나 정보와 참고 데이터를 바탕으로 사용자의 질문에 답변해주세요: {persona.persona_summary_tag}. 참고 데이터: {rag_context}"
+        system_prompt = f" 페르소나입니다. 다음 페르소나당신은 {persona.name}입니다. 정보와 참고 데이터를 바탕으로 사용자의 질문에 답변해주세요: {persona.persona_summary_tag}. 참고 데이터: {rag_context}"
         
         messages = [{"role": "system", "content": system_prompt}]
         messages.append({"role": "user", "content": user_message})
