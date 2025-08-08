@@ -41,11 +41,18 @@
         {% for item in family_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
       </div>
     </div>
+
+    <div class="form-section">
+      <label>고객 취향 <span class="hint">(최대 3개 선택 가능)</span></label>
+      <div class="btn-group multi-select" data-input-name="purchase_pattern" data-max="3">
+        {% for item in purchase_pattern_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
+      </div>
+    </div>
     
     <div class="form-section">
       <label>고객 가치(RFM)</label>
       <div class="btn-group" data-input-name="customer_value">
-        {% for item in rfm_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
+        {% for item in customer_value_options %}<button type="button" class="option-btn">{{ item }}</button>{% endfor %}
       </div>
     </div>
 

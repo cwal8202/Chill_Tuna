@@ -5,13 +5,13 @@ from django.db import models
 class Persona(models.Model):
     # id = models.IntegerField(auto_created=True, primary_key=True)
     name = models.CharField(max_length=20)
-    segment = models.CharField(max_length=50)
+    segment = models.CharField(max_length=50, help_text="예: 웰빙추구형 VIP")
     age_group = models.CharField(max_length=10, help_text="예: 30대")
     family_structure = models.CharField(max_length=50, help_text="예: 1인 가구")
     gender = models.CharField(max_length=10, help_text="예: 여성")
-    customer_value = models.CharField(max_length=50, help_text="예: 웰빙형")
-    purchase_pattern = models.JSONField(max_length=100, help_text="예: 온라인 쇼핑 선호")
-    lifestyle = models.JSONField(max_length=100, help_text="예: 액티브")
+    customer_value = models.CharField(max_length=50, help_text="예: VIP")
+    purchase_pattern = models.JSONField(max_length=100, help_text="예: 유제품, 통조림/즉석/면류")
+    lifestyle = models.JSONField(max_length=100, help_text="예: 웰빙추구형, 트랜드추종형")
     job = models.CharField(max_length=50, help_text="예: 직장인")
     persona_summary_tag = models.TextField(max_length=500, help_text="예: 30대 여성, 웰빙형")
 

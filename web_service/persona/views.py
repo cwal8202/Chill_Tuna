@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Persona
 import json
 
+
 # 함수명      : create_persona
 # input      : request
 # output     : HttpResponse (render 또는 redirect)
@@ -45,8 +46,8 @@ def create_persona(request):
             "age_options": ["20대", "30대", "40대", "50대", "60대 이상"],
             "gender_options": ["남", "여"],
             "family_options": ["1인 가구", "부모동거", "부부", "자녀1명", "자녀2명 이상", "기타"],
-            "taste_options": ["통조림/즉석/면류", "생수/음료/커피", "과자/떡/베이커리", "냉장/냉동/간편식", "유제품", "건강식품"],
-            "rfm_options": ["VIP", "우수고객", "잠재우수고객", "신규고객", "잠재이탈고객", "이탈/휴면고객"],
+            "purchase_pattern_options": ["통조림/즉석/면류", "생수/음료/커피", "과자/떡/베이커리", "냉장/냉동/간편식", "유제품", "건강식품"],
+            "customer_value_options": ["VIP", "우수고객", "잠재우수고객", "신규고객", "잠재이탈고객", "이탈/휴면고객"],
             "lifestyle_options": ["트렌드추종", "가격민감", "브랜드선호", "건강중시"],
         }
         return render(request, "persona/create_persona.html", context)
@@ -82,7 +83,7 @@ def find_and_chat_view(request):
     selected_age = request.GET.get('age_group')
     selected_gender = request.GET.get('gender')
     selected_family = request.GET.get('family_structure')
-    selected_rfm = request.GET.get('customer_value')
+    selected_customer_value = request.GET.get('customer_value')
     
     selected_lifestyles = request.GET.getlist('lifestyle') 
 
@@ -97,7 +98,7 @@ def find_and_chat_view(request):
             score += 5
         if selected_family and persona.family_structure == selected_family:
             score += 3
-        if selected_rfm and persona.customer_value == selected_rfm:
+        if selected_customer_value and persona.customer_value == selected_customer_value:
             score += 3
 
         if selected_lifestyles and isinstance(persona.lifestyle, list):
