@@ -66,8 +66,8 @@ graph TD
 | 기능명 | URL | 방식 | 설명 |
 |--------|-----|------|------|
 | 페르소나 필터 API | /api/personas/filter/ | GET | 조건 기반 필터링 결과 JSON 반환 |
-| 채팅 메시지 API | /api/chat/send/ | POST | 사용자 메시지 전달 및 페르소나 응답 생성 |
 | 페르소나 프로필 API | /api/persona/profile/ | GET | 선택된 페르소나 JSON 반환 |
+| 채팅 메시지 API | /api/chat/send/ | POST | 사용자 메시지 전달 및 페르소나 응답 생성 |
 | 타임스탬프 갱신 API | /api/chat/last_updated/ | POST | 채팅 종료 시점 기록 갱신 처리 |
 
 
@@ -77,7 +77,6 @@ graph TD
 ### Persona
 
 - id: PK
-- age_group, gender, region, lifestyle, rfm_segment(임시)
 - name
 - segment (마이크로세그먼트)
 - age_group : 연령대
