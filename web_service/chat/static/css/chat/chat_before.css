@@ -57,11 +57,11 @@
 }
 
 /* ✅ AI */
-.chat-row.persona {
+.chat-row.ai {
   justify-content: flex-start;
 }
 
-.chat-row.persona .chat-bubble {
+.chat-row.ai .chat-bubble {
   background-color: #f3f4f6;
   color: #111827;
   border-bottom-left-radius: 4px;
@@ -125,36 +125,6 @@
   border-radius: 16px;
   line-height: 1.6;
 }
-
-/* 안내 접기 */
-.chat-system-msg-wrapper {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  padding: 6px;
-  margin-bottom: 15px;
-}
-
-.toggle-btn {
-  background: none;
-  border: none;
-  color: #666;
-  font-weight: bold;
-  cursor: pointer;
-  float: right;
-  margin-top: 8px;
-  padding: 0;
-}
-
-.toggle-btn:hover {
-  color: #333;
-}
-
-.chat-system-msg {
-  font-size: 0.95rem;
-  color: #333;
-  line-height: 1.5;
-}
-/* *안내 접기 종료 */
 
 .chat-footer-note {
   font-size: 12px;

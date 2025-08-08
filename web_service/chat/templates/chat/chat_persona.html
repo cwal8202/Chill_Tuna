@@ -9,38 +9,36 @@
 
 {% block content %}
 <div class="chat-wrapper">
-  <!-- 페르소나 정보 -->
+
+  <!-- 🔹 페르소나 정보 -->
   <div class="persona-info">
-    <div class="persona-header">🧠 <strong>페르소나5 - 최장호</strong></div>
+    <div class="persona-header"><strong>페르소나{{ persona.id }} - {{ persona.name }}</strong></div>
     <div class="persona-tags">
-      <div>20대, 남자, 1인가구</div>
-      <div>통조림/즉석/면류, 건강식품</div>
-      <div>잠재우수고객</div>
-      <div>가격민감, 건강중시</div>
+      <div>{{ persona.age_group }}, {{ persona.gender }}, {{ persona.family_structure }}</div>
+      <div>{{ persona.purchase_pattern|join:", " }}</div>
+      <div>{{ persona.customer_value }}</div>
+      <div>{{ persona.lifestyle|join:", " }}</div>
     </div>
   </div>
 
-  <!-- 사용자 메시지 -->
-  <div class="chat-row user">
-    <div class="chat-bubble">동원 참치 85g 10개, 20개, 30개에 대한 선호도가 궁금해</div>
-  </div>
-
-  <!-- 페르소나 응답 -->
-  <div class="chat-row ai">
-    <div class="chat-bubble">
-    나는 혼자 밥을 먹기 때문에 용량이 작은 85g을 좋아해. 
-    다만 너무 많이 사놓는 건 너무 부담스럽고
-    적당량 사먹는걸 선호하지. 10개 묶음 상품이 내게는 더 좋을 것 같아
-    </div>
-  </div>
-
-  <!-- 입력창 + 안내 -->
-  <div class="chat-input-container">
-    <div class="chat-system-msg">
+  <!-- 🔹 채팅 메시지 목록 -->
+  <!-- 초기 안내 메시지 (접기/펼치기 가능) -->
+  <div class="chat-system-msg-wrapper">
+    <div class="chat-system-msg" id="system-msg">
       어떤 비즈니스 시뮬레이션을 원하시나요?<br>
       신제품, 기존제품에 대한 구매의향을 물어보세요.<br>
       또는 어떤 프로모션을 했을 때 이 고객이 구매할 의향이 생길지 물어 볼 수 있습니다.
     </div>
+    <button id="toggle-system-msg" class="toggle-btn">안내 접기</button>
+  </div>
+  {% for msg in chat_messages %}
+    <div class="chat-row {% if msg.sender == 'user' %}user{% else %}persona{% endif %}">
+      <div class="chat-bubble">{{ msg.message }}</div>
+    </div>
+  {% endfor %}
+
+  <!-- 🔹 입력창 -->
+  <div class="chat-input-container">
     <div class="chat-input-box">
       <input type="text" class="chat-input" placeholder="메시지를 입력하세요...">
       <button class="chat-send-btn">📤</button>
@@ -50,5 +48,119 @@
       참고용으로 사용하세요.
     </div>
   </div>
+
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 안내 접기 기능
+    const toggleBtn = document.getElementById("toggle-system-msg");
+    const systemMsg = document.getElementById("system-msg");
+
+    toggleBtn.addEventListener("click", function () {
+      if (systemMsg.style.display === "none") {
+        systemMsg.style.display = "block";
+        toggleBtn.textContent = "안내 접기";
+      } else {
+        systemMsg.style.display = "none";
+        toggleBtn.textContent = "안내 보기";
+      }
+    });
+
+    const inputBox = document.querySelector(".chat-input");
+    const sendBtn = document.querySelector(".chat-send-btn");
+    let isSending = false;
+    let loadingInterval = null;
+
+    // 전송 버튼 클릭시
+    sendBtn.addEventListener("click", sendMessage);
+
+    // 입력 버튼 엔터 누를 때
+    inputBox.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // CSRF 토큰 읽기 함수
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // 사용자 입력 값 전송 함수
+    async function sendMessage() {
+      if (isSending) return;
+      const message = inputBox.value.trim();
+      if (!message) return;
+
+      isSending = true;
+      sendBtn.disabled = true;
+      inputBox.disabled = true;
+      sendBtn.textContent = "⏹️";
+
+      // 사용자 메시지 추가
+      const userChat = document.createElement("div");
+      userChat.className = "chat-row user";
+      userChat.innerHTML = `<div class="chat-bubble">${message}</div>`;
+      document.querySelector(".chat-input-container").before(userChat);
+
+      // 페르소나 로딩 버블 추가
+      const loadingChat = document.createElement("div");
+      loadingChat.className = "chat-row persona loading";
+      loadingChat.innerHTML = `<div class="chat-bubble">⏳ 로딩 중</div>`;
+      document.querySelector(".chat-input-container").before(loadingChat);
+
+      // 동적 점 애니메이션 시작
+      let dotCount = 0;
+      loadingInterval = setInterval(() => {
+        dotCount = (dotCount + 1) % 4; // 0,1,2,3 반복
+        const dots = '.'.repeat(dotCount);
+        loadingChat.querySelector('.chat-bubble').textContent = `⏳ 로딩 중${dots}`;
+      }, 500);
+
+      try {
+        const modelSelector = document.querySelector(".model-selector");
+        const model = modelSelector ? modelSelector.value : "default-model";
+        const personaId = {{ persona.id }};
+        const threadId = {{ chatthread.id|default:"null" }};
+
+        const response = await fetch("{% url 'chat:send_message' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify({ message, model, persona_id: personaId, thread_id: threadId })
+        });
+        const data = await response.json();
+
+        // 애니메이션 중지
+        clearInterval(loadingInterval);
+
+        // 로딩 말풍선을 실제 응답으로 교체
+        const personaChat = document.createElement("div");
+        personaChat.className = "chat-row persona";
+        personaChat.innerHTML = `<div class="chat-bubble">${data.persona_msg}</div>`;
+        loadingChat.replaceWith(personaChat);
+
+        inputBox.value = "";
+      } catch (err) {
+        console.error("메시지 전송 중 에러:", err);
+        clearInterval(loadingInterval);
+        loadingChat.querySelector('.chat-bubble').textContent = `❗ 오류가 발생했습니다.`;
+      } finally {
+        isSending = false;
+        sendBtn.disabled = false;
+        inputBox.disabled = false;
+        sendBtn.textContent = "📤";
+        inputBox.focus();
+      }
+    }
+  });
+</script>
+
+
 {% endblock %}
