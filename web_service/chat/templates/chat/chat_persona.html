@@ -8,7 +8,7 @@
 {% block title %}페르소나 채팅{% endblock %}
 
 {% block content %}
-<div class="chat-wrapper">
+<div class="chat-wrapper" data-persona='{{ persona_json|safe }}'>
 
   <!-- 🔹 페르소나 정보 -->
   <div class="persona-info">
@@ -38,16 +38,17 @@
   {% endfor %}
 
   <!-- 🔹 입력창 -->
-  <div class="chat-input-container">
+  <form class="chat-input-container">
+    {% csrf_token %}
     <div class="chat-input-box">
       <input type="text" class="chat-input" placeholder="메시지를 입력하세요...">
-      <button class="chat-send-btn">📤</button>
+      <button type="button" class="chat-send-btn">📤</button>
     </div>
     <div class="chat-footer-note">
       Chill Tuna 비즈니스 시뮬레이터는 실수를 할 수 있습니다.<br>
       참고용으로 사용하세요.
     </div>
-  </div>
+  </form>
 
 </div>
 
@@ -56,6 +57,10 @@
     // 안내 접기 기능
     const toggleBtn = document.getElementById("toggle-system-msg");
     const systemMsg = document.getElementById("system-msg");
+    const chatWrapper = document.querySelector('.chat-wrapper');
+    const personaJsonString = chatWrapper.dataset.persona;
+    const persona = JSON.parse(personaJsonString);
+    console.log(persona, "@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
     toggleBtn.addEventListener("click", function () {
       if (systemMsg.style.display === "none") {
@@ -90,6 +95,9 @@
       if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
+    // 채팅 스레드 id 
+    let currentThreadId = {{ chatthread.id|default:"null" }};
+
     // 사용자 입력 값 전송 함수
     async function sendMessage() {
       if (isSending) return;
@@ -113,7 +121,7 @@
       loadingChat.innerHTML = `<div class="chat-bubble">⏳ 로딩 중</div>`;
       document.querySelector(".chat-input-container").before(loadingChat);
 
-      // 동적 점 애니메이션 시작
+      // 로딩중 애니메이션 시작
       let dotCount = 0;
       loadingInterval = setInterval(() => {
         dotCount = (dotCount + 1) % 4; // 0,1,2,3 반복
@@ -123,9 +131,8 @@
 
       try {
         const modelSelector = document.querySelector(".model-selector");
-        const model = modelSelector ? modelSelector.value : "default-model";
+        let model = modelSelector ? modelSelector.value : "default-model";
         const personaId = {{ persona.id }};
-        const threadId = {{ chatthread.id|default:"null" }};
 
         const response = await fetch("{% url 'chat:send_message' %}", {
           method: "POST",
@@ -133,14 +140,44 @@
             "Content-Type": "application/json",
             "X-CSRFToken": getCookie("csrftoken")
           },
-          body: JSON.stringify({ message, model, persona_id: personaId, thread_id: threadId })
+          body: JSON.stringify({ message, model, persona_id: personaId, thread_id: currentThreadId })
         });
+        // llm 답변 데이터
         const data = await response.json();
 
-        // 애니메이션 중지
+        // 새채팅이면 base.html 목록에 추가
+        if (data.is_new_thread) {
+          // base.html 목록에 추가
+          const chatList = document.querySelector('.chat-list');
+          const newChatItem  = document.createElement('li');
+          const newUrl = `/chat/start/${personaId}/${data.thread_id}/`;
+          newChatItem.className = 'chat-item';
+          newChatItem.innerHTML = `
+                              <a href="${newUrl}" class="chat-link">
+                                <div class="chat-icon-circle">💬</div>
+                                <div class="chat-info">
+                                  <div class="chat-badge">${persona.persona_summary_tag}</div>
+                                  <div class="chat-name">${data.thread_id} 페르소나 ${personaId} - ${persona.name}</div>
+                                </div>
+                              </a>
+                                `;
+          // 제일 위에 추가
+          chatList.prepend(newChatItem); 
+          // 브라우저 주소창의 URL을 새로고침 없이 변경합니다.
+          const newUrlForHistory = `/chat/start/${personaId}/${data.thread_id}/`;
+          history.replaceState(null, '', newUrlForHistory);
+
+        }
+        
+        // 새로 생성된 thread_id 전달
+        if (data.thread_id) {
+            currentThreadId = data.thread_id;
+        }
+
+        // 로딩중 정지
         clearInterval(loadingInterval);
 
-        // 로딩 말풍선을 실제 응답으로 교체
+        // 로딩중 실제 응답으로 교체
         const personaChat = document.createElement("div");
         personaChat.className = "chat-row persona";
         personaChat.innerHTML = `<div class="chat-bubble">${data.persona_msg}</div>`;
