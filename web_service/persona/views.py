@@ -167,3 +167,4 @@ def find_and_chat_view(request):
             return redirect('persona:chat_persona', persona_id=all_personas.first().id)
         else:
             return redirect('persona:create_persona')
+        
