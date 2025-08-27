@@ -1,0 +1,32 @@
+[
+  {
+    "product": {
+      "product_id_or_name": "덴마크_하이그릭요거트_400g",
+      "product_name": "덴마크 하이그릭요거트 400g"
+    },
+    "persona": {
+      "persona_key": 1
+    },
+    "prompt": "[역할]\n당신은 한국 소비자 데이터 분석가이자 마케팅 전문가입니다.\n아래의 \"제품 정보\"와 \"페르소나\"를 바탕으로,\n이 페르소나가 해당 제품의 구매자로서 성립하는 **싱글 턴** 페르소나 JSON을 생성하세요.\n\n[제품 정보]\n- 제품명: 덴마크 하이그릭요거트 400g\n- 카테고리: 우유류 > 발효유 > 호상-중대용량\n- 주요 특징: 건강식품, 고단백, 고소한맛, 높은 만족도\n- 타깃: 유당불내증\n- 출시일: 2025년 2월 출시\n- 기준 가격대: 3,980원\n- 광고/프로모션: 2025년 6-7월, 일반인 광고\n\n[페르소나]\n- id: 1\n- 속성(가중치 합=1):\n- hmr_preference_scaled: 0.6983349657198823 (w=0.168)\n- health_orientation_scaled: 0.5343511450381679 (w=0.128)\n- variety_seeking_scaled: 0.5260869565217392 (w=0.126)\n- cooking_convenience_scaled: 0.4295377677564825 (w=0.103)\n- premium_orientation_scaled: 0.2866449511400651 (w=0.069)\n- price_sensitivity_scaled: 0.2290871225269004 (w=0.055)\n- brand_loyalty_scaled: 0.208955223880597 (w=0.050)\n- gender: 남자 (w=0.043)\n- age: 30대 (w=0.043)\n- job: 사무 종사자 (w=0.043)\n- education: 대학교 졸업(전문대졸/대학원생 포함) (w=0.043)\n- region: 경상북도 (w=0.043)\n- household: 1세대가족 (w=0.043)\n- marriage: 기혼 (w=0.043)\n\n[클러스터 컨텍스트]\n- cluster: 0\n- label: 실속형 미식가\n- desc: 편리성을 중시하면서도 새로운 맛과 제품을 시도하는 데 적극적인 소비자 그룹입니다. 가격에 민감하기보다는 효율성과 맛을 동시에 추구합니다.\n\n[규칙]\n- '클러스터 컨텍스트'는 배경 지침으로만 사용합니다. 속성 가중치(합=1)와 충돌 시 '속성 가중치'를 우선합니다.\n- 2024-07 ~ 2025-06 월별로 구매확률(prob 0~1)과 예상수량(qty 정수)을 제시합니다.\n- 추석/설, 광고/프로모션/계절성을 반영합니다.\n- **반드시 아래 JSON 스키마를 출력**하고, 불필요한 설명 문장은 출력하지 마세요.\n\n[출력 스키마(JSON)]\n{\n  \"persona_id\": \"p_{product_id_or_name}_1\",\n  \"product_name\": \"덴마크 하이그릭요거트 400g\",\n  \"product_id\": \"None\",\n  \"segment_ref\": \"1\",\n  \"attributes\": { \"{{속성명}}\": {\"value\": \"<값>\", \"weight\": <0~1> }, \"...\": \"...\" },\n  \"purchase_pattern\": {\n    \"avg_purchase_prob\": <0~1>,\n    \"avg_purchase_qty\": <int>,\n    \"seasonality\": {\"추석\": \"+x%\", \"설\": \"+y%\"},\n    \"promotion_effect\": \"광고/프로모션 노출 시 +z%\"\n  },\n  \"forecast_12mo\": {\n    \"2024-07\": {\"prob\": <0~1>, \"qty\": <int>},\n    \"...\": {},\n    \"2025-06\": {\"prob\": <0~1>, \"qty\": <int>}\n  }\n}"
+  },
+  {
+    "product": {
+      "product_id_or_name": "덴마크_하이그릭요거트_400g",
+      "product_name": "덴마크 하이그릭요거트 400g"
+    },
+    "persona": {
+      "persona_key": 2
+    },
+    "prompt": "[역할]\n당신은 한국 소비자 데이터 분석가이자 마케팅 전문가입니다.\n아래의 \"제품 정보\"와 \"페르소나\"를 바탕으로,\n이 페르소나가 해당 제품의 구매자로서 성립하는 **싱글 턴** 페르소나 JSON을 생성하세요.\n\n[제품 정보]\n- 제품명: 덴마크 하이그릭요거트 400g\n- 카테고리: 우유류 > 발효유 > 호상-중대용량\n- 주요 특징: 건강식품, 고단백, 고소한맛, 높은 만족도\n- 타깃: 유당불내증\n- 출시일: 2025년 2월 출시\n- 기준 가격대: 3,980원\n- 광고/프로모션: 2025년 6-7월, 일반인 광고\n\n[페르소나]\n- id: 2\n- 속성(가중치 합=1):\n- hmr_preference_scaled: 0.9020568070519096 (w=0.180)\n- health_orientation_scaled: 0.668484187568157 (w=0.133)\n- cooking_convenience_scaled: 0.6429913566328448 (w=0.128)\n- variety_seeking_scaled: 0.4217391304347826 (w=0.084)\n- price_sensitivity_scaled: 0.4026379729260674 (w=0.080)\n- premium_orientation_scaled: 0.355700325732899 (w=0.071)\n- gender: 남자 (w=0.043)\n- age: 30대 (w=0.043)\n- job: 사무 종사자 (w=0.043)\n- education: 대학교 졸업(전문대졸/대학원생 포함) (w=0.043)\n- region: 서울특별시 (w=0.043)\n- household: 1세대가족 (w=0.043)\n- marriage: 기혼 (w=0.043)\n- brand_loyalty_scaled: 0.1194029850746268 (w=0.024)\n\n[클러스터 컨텍스트]\n- cluster: 1\n- label: 건강 추구형 소비자\n- desc: 가격이나 브랜드에 크게 구애받지 않고 건강을 최우선으로 고려하는 프리미엄 소비자 그룹입니다. 건강과 편리성을 모두 만족시키는 제품에 기꺼이 지갑을 엽니다.\n\n[규칙]\n- '클러스터 컨텍스트'는 배경 지침으로만 사용합니다. 속성 가중치(합=1)와 충돌 시 '속성 가중치'를 우선합니다.\n- 2024-07 ~ 2025-06 월별로 구매확률(prob 0~1)과 예상수량(qty 정수)을 제시합니다.\n- 추석/설, 광고/프로모션/계절성을 반영합니다.\n- **반드시 아래 JSON 스키마를 출력**하고, 불필요한 설명 문장은 출력하지 마세요.\n\n[출력 스키마(JSON)]\n{\n  \"persona_id\": \"p_{product_id_or_name}_2\",\n  \"product_name\": \"덴마크 하이그릭요거트 400g\",\n  \"product_id\": \"None\",\n  \"segment_ref\": \"2\",\n  \"attributes\": { \"{{속성명}}\": {\"value\": \"<값>\", \"weight\": <0~1> }, \"...\": \"...\" },\n  \"purchase_pattern\": {\n    \"avg_purchase_prob\": <0~1>,\n    \"avg_purchase_qty\": <int>,\n    \"seasonality\": {\"추석\": \"+x%\", \"설\": \"+y%\"},\n    \"promotion_effect\": \"광고/프로모션 노출 시 +z%\"\n  },\n  \"forecast_12mo\": {\n    \"2024-07\": {\"prob\": <0~1>, \"qty\": <int>},\n    \"...\": {},\n    \"2025-06\": {\"prob\": <0~1>, \"qty\": <int>}\n  }\n}"
+  },
+  {
+    "product": {
+      "product_id_or_name": "덴마크_하이그릭요거트_400g",
+      "product_name": "덴마크 하이그릭요거트 400g"
+    },
+    "persona": {
+      "persona_key": 3
+    },
+    "prompt": "[역할]\n당신은 한국 소비자 데이터 분석가이자 마케팅 전문가입니다.\n아래의 \"제품 정보\"와 \"페르소나\"를 바탕으로,\n이 페르소나가 해당 제품의 구매자로서 성립하는 **싱글 턴** 페르소나 JSON을 생성하세요.\n\n[제품 정보]\n- 제품명: 덴마크 하이그릭요거트 400g\n- 카테고리: 우유류 > 발효유 > 호상-중대용량\n- 주요 특징: 건강식품, 고단백, 고소한맛, 높은 만족도\n- 타깃: 유당불내증\n- 출시일: 2025년 2월 출시\n- 기준 가격대: 3,980원\n- 광고/프로모션: 2025년 6-7월, 일반인 광고\n\n[페르소나]\n- id: 3\n- 속성(가중치 합=1):\n- hmr_preference_scaled: 0.9020568070519096 (w=0.161)\n- cooking_convenience_scaled: 0.8684704998121007 (w=0.155)\n- brand_loyalty_scaled: 0.8529850746268656 (w=0.153)\n- price_sensitivity_scaled: 0.4873307879208608 (w=0.087)\n- premium_orientation_scaled: 0.3755700325732899 (w=0.067)\n- variety_seeking_scaled: 0.3217391304347826 (w=0.058)\n- gender: 남자 (w=0.043)\n- age: 30대 (w=0.043)\n- job: 사무 종사자 (w=0.043)\n- education: 대학교 졸업(전문대졸/대학원생 포함) (w=0.043)\n- region: 세종특별자치시 (w=0.043)\n- household: 1세대가족 (w=0.043)\n- marriage: 기혼 (w=0.043)\n- health_orientation_scaled: 0.1022355507088331 (w=0.018)\n\n[클러스터 컨텍스트]\n- cluster: 3\n- label: 트렌드 주도형 소비자\n- desc: 자신의 취향과 경험을 중시하는 소비자 그룹입니다. 단순히 배를 채우는 것 이상의 가치를 추구하며, 새로운 제품을 가장 먼저 경험하고 공유하려는 경향이 강합니다\n\n[규칙]\n- '클러스터 컨텍스트'는 배경 지침으로만 사용합니다. 속성 가중치(합=1)와 충돌 시 '속성 가중치'를 우선합니다.\n- 2024-07 ~ 2025-06 월별로 구매확률(prob 0~1)과 예상수량(qty 정수)을 제시합니다.\n- 추석/설, 광고/프로모션/계절성을 반영합니다.\n- **반드시 아래 JSON 스키마를 출력**하고, 불필요한 설명 문장은 출력하지 마세요.\n\n[출력 스키마(JSON)]\n{\n  \"persona_id\": \"p_{product_id_or_name}_3\",\n  \"product_name\": \"덴마크 하이그릭요거트 400g\",\n  \"product_id\": \"None\",\n  \"segment_ref\": \"3\",\n  \"attributes\": { \"{{속성명}}\": {\"value\": \"<값>\", \"weight\": <0~1> }, \"...\": \"...\" },\n  \"purchase_pattern\": {\n    \"avg_purchase_prob\": <0~1>,\n    \"avg_purchase_qty\": <int>,\n    \"seasonality\": {\"추석\": \"+x%\", \"설\": \"+y%\"},\n    \"promotion_effect\": \"광고/프로모션 노출 시 +z%\"\n  },\n  \"forecast_12mo\": {\n    \"2024-07\": {\"prob\": <0~1>, \"qty\": <int>},\n    \"...\": {},\n    \"2025-06\": {\"prob\": <0~1>, \"qty\": <int>}\n  }\n}"
+  }
+]
