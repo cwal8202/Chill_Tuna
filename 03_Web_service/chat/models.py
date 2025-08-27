@@ -5,13 +5,13 @@ class ChatThread(models.Model):
     # id = models.IntegerField(auto_created=True, primary_key=True)
 
     # 채팅 스레드의 고유 ID - 스레드가 어떤 페르소나와 대화한 것인지 연결
-    persona_id = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"ChatThread with {self.persona_id}"
+        return f"ChatThread with {self.persona}"
     
 
 

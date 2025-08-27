@@ -61,7 +61,7 @@ def save_chat_messsage(user_input, persona_id, thread_id, llm_output):
        if persona is None:
            return None
        # fk인 persona_id 에 persona객체 할당
-       chat_thread = ChatThread.objects.create(persona_id=persona)
+       chat_thread = ChatThread.objects.create(persona=persona)
     # fk인 thread_id 에 chat_thread 객체 할당
     ChatMessage.objects.create(thread=chat_thread, sender='user', message=user_input)
     ChatMessage.objects.create(thread=chat_thread, sender='persona', message=llm_output)
