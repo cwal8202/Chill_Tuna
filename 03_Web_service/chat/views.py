@@ -31,7 +31,7 @@ persona_id = 1
 thread_id = 1
 
 def chat_start(request, persona_id, thread_id):
-
+    print(persona_id, thread_id, "###########################")
     # 1. 페르소나 id, thread_id로 페르소나, 채팅 내용 가져오기
     persona, chat_messages, error_message = chat_service.get_chat_start_data(persona_id, thread_id)
 
@@ -81,7 +81,6 @@ def send_message(request):
         # 3) 화면에 LLM 답변 전달.
 
         # 3) 화면에 LLM 답변과 새로 생성/업데이트된 thread_id를 전달
-        llm_output = "안녕하세요! 어떤 비즈니스 시뮬레이션을 원하시나요?" # 삭제해야함
         if chat_thread:
             if thread_id:
                 is_new_thread = False
