@@ -1,12 +1,12 @@
-# Chill Tuna (동원 x 카이스트 AI Competition)
+# RPLA를 활용한 비즈니스 시뮬레이터를 통한 신제품 판매량 예측
 > 프로젝트 개요
-- 소개 : RPLA를 활용한 비즈니스 시뮬레이터를 통한 신제품 판매량 예측
+- 소개 : 프롬프트 엔지니어링 역할부여를 통한 페르소나 신제품 판매 예측 시뮬레이션
 - 프로젝트 웹 페이지 : https://chilltuna.pythonanywhere.com/
 - 팀원(4인) : 박진성, 주용곤, 박동현, 최장호
 - 기간 : 2025.07.28 ~ 2025.08.28
 - 언어 : Python 3.10.9
 - DBMS : MySQL 
-- Python Library : Tensorflow, Pandas, etc
+- Python Library : Pandas, openai, pydantic, etc
 - Web Framework : Django
 - AI : OPENAI API, eXaone, ollama
 
