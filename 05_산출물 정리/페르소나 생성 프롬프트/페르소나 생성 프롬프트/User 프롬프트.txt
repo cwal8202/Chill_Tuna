@@ -1,0 +1,53 @@
+[Cluster Catalog: DO NOT DEVIATE]
+0: {'label': '실속형 미식가', 'description': '편리성을 중시하면서도 새로운 맛과 제품을 시도하는 데 적극적인 소비자 그룹입니다. 가격에 민감하기보다는 효율성과 맛을 동시에 추구합니다.'}
+1: {'label': '건강 추구형 소비자', 'description': '가격이나 브랜드에 크게 구애받지 않고 건강을 최우선으로 고려하는 프리미엄 소비자 그룹입니다. 건강과 편리성을 모두 만족시키는 제품에 기꺼이 지갑을 엽니다.'}
+3: {'label': '트렌드 주도형 소비자', 'description': '자신의 취향과 경험을 중시하는 소비자 그룹입니다. 단순히 배를 채우는 것 이상의 가치를 추구하며, 새로운 제품을 가장 먼저 경험하고 공유하려는 경향이 강합니다.'}
+
+[Constraints]
+- 생성되는 {batch_size}명의 페르소나는 cluster 0, 1, 3을 골고루 포함하도록 할 것
+- 성별, 연령대, 직업군의 다양성이 유지되어야 하며, 특정 집단으로 편중되지 않도록 유의할 것
+- meta.label / meta.description은 반드시 위 Catalog에서 복사할 것 (변형 금지)
+
+{few_shot_block}
+이제 위 조건을 만족하는 새로운 페르소나 {batch_size}개를 JSON 배열 형식으로 생성해주세요.
+
+제품 ID: {product_name}
+페르소나 번호: {product_name}_{start_index}
+
+[출력 형식 및 속성 예시값] (JSON 배열 형식! 단일 객체 아님)
+
+아래는 페르소나를 생성할 때 따르는 속성 목록과 형식 예시입니다. 단, 속성 값은 반드시 아래 예시값 중에서 다양하게 조합하여 사용하세요.
+
+```json
+{
+  "persona_key": "{product_name}_{start_index}",
+  "attributes": {
+    "gender": "남자 또는 여자 중 선택",
+    "age": "20대 / 30대 / 40대 / 50대 / 60대 이상 중 선택",
+    "job": "관리자 / 군인 / 기능원 및 관련 기능 종사자 / 농림어업 숙련 종사자 / 단순노무 종사자 / 사무 종사자 / 서비스 종사자 / 전문가 및 관련 종사자 / 판매 종사자 / 장치·기계 조작 및 조립 종사자 / 주부 / 취업 준비 중 / 학생 중 선택",
+    "education": "고졸(대학 재학 포함) / 대학교 졸업(전문대졸/대학원생 포함) / 대학원 졸업 이상 / 중졸 이하 중 선택",
+    "region": "강원도 / 경기도 / 경상남도 / 경상북도 / 광주광역시 / 대구광역시 / 대전광역시 / 서울특별시 / 세종특별자치시 / 울산광역시 / 인천광역시 / 전라남도 / 전라북도 / 제주특별자치도 / 충청남도 / 충청북도 중 선택",
+    "household": "1인 가구 / 1세대가족 / 2세대가족 중 선택",
+    "marriage": "기혼 / 미혼(사별, 이혼 포함) 중 선택",
+    "income_status": "맞벌이 함 / 맞벌이 하지 않음 중 선택",
+    "income_month": "100만원 미만 ~ 1,000만원 이상 중 선택",
+
+    "brand_loyalty_scaled": "0.0 ~ 1.0 사이의 실수값",
+    "cooking_convenience_scaled": "0.0 ~ 1.0 사이의 실수값",
+    "health_orientation_scaled": "0.0 ~ 1.0 사이의 실수값",
+    "hmr_preference_scaled": "0.0 ~ 1.0 사이의 실수값",
+    "premium_orientation_scaled": "0.0 ~ 1.0 사이의 실수값",
+    "price_sensitivity_scaled": "0.0 ~ 1.0 사이의 실수값",
+    "variety_seeking_scaled": "0.0 ~ 1.0 사이의 실수값"
+  },
+  "meta": {
+    "cluster": "0, 1, 3 중 택일",
+    "label": "해당 cluster에 맞는 label을 Catalog에서 복사",
+    "description": "해당 cluster에 맞는 description을 Catalog에서 복사"
+  },
+}
+
+## 참고
+- 위 `{few_shot_block}` 자리에는 `build_fewshot_block(personas, k=10)`이 만든 “예시 페르소나 JSON 스니펫들”이 그대로 들어갑니다.
+- 실제 호출에서는 `batch_size=5`, `start_index`가 `0, 5, 10, 15`로 바뀌며, `product_name`은 각 제품명으로 대체됩니다.
+- Catalog 부분은 현재 파이썬 dict 표현(작은따옴표 포함)으로 들어가며, 더 깔끔한 블록을 원하면 `cluster_catalog_block()`을 써서 문자열로 넣으면 좋습니다.
